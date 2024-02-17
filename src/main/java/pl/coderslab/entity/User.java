@@ -5,13 +5,19 @@ public class User {
     private static String userName;
     private static String email;
     private static String password;
-
     public User() {
-        this.id = 0;
+
     }
 
     public User(String userName, String email, String password) {
         this.id = 0;
+        this.userName = userName;
+        this.email = email;
+        this.password = password;
+    }
+
+    public User(int id, String userName, String email, String password) {
+        this.id = id;
         this.userName = userName;
         this.email = email;
         this.password = password;

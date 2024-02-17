@@ -7,10 +7,34 @@ import java.sql.*;
 
 public class UserDao {
     private static final String CREATE_USER_QUERY = "INSERT INTO users (username, email, password) VALUES (?, ?, ?)";
+    private static final String READ_USER_QUERY = "SELECT username, email, password FROM users WHERE id=?";
 
     public String hashPassword(String password) {
         return BCrypt.hashpw(password, BCrypt.gensalt());
     }
+
+
+    public User read(int id) {
+        try (Connection connection = DbUtil.getConnection()) {
+            PreparedStatement statement = connection.prepareStatement(READ_USER_QUERY);
+            statement.setInt(1, id);
+            ResultSet resultSet = statement.executeQuery();
+            if(resultSet.next()) {
+                return new User(id, resultSet.getString("username"),
+                        resultSet.getString("email"), resultSet.getString("password"));
+            }
+            else {
+                return null;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+
+
+
 
     public User create(User user) {
         try (Connection conn = DbUtil.getConnection()) {
