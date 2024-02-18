@@ -8,6 +8,7 @@ import java.sql.*;
 public class UserDao {
     private static final String CREATE_USER_QUERY = "INSERT INTO users (username, email, password) VALUES (?, ?, ?)";
     private static final String READ_USER_QUERY = "SELECT username, email, password FROM users WHERE id=?";
+    private static final String UPDATE_USER_QUERY = "UPDATE users SET username=?, email=?, password=? WHERE id=?;";
 
     public String hashPassword(String password) {
         return BCrypt.hashpw(password, BCrypt.gensalt());
@@ -32,7 +33,19 @@ public class UserDao {
 
     }
 
-
+    public void update(User user) {
+        try (Connection conn = DbUtil.getConnection()) {
+            PreparedStatement statement =
+                    conn.prepareStatement(UPDATE_USER_QUERY);
+            statement.setString(1, user.getUserName());
+            statement.setString(2, user.getEmail());
+            statement.setString(3, hashPassword(user.getPassword()));
+            statement.setInt(4, user.getId());
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
 
 
