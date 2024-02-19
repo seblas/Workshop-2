@@ -10,7 +10,7 @@ public class MainDelete {
         // sprawdzanie działania delete
         UserDao userDao = new UserDao();
         try {
-            userDao.delete(17);
+            userDao.delete(1);
             User user = userDao.read(4);
             if(user!=null) {
                 System.out.println(user.getId() + " " + user.getUserName() + " " + user.getEmail() + " " + user.getPassword());
